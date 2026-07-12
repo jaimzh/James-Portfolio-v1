@@ -39,6 +39,14 @@
   "previewImage": "assets/image copy 4.png",
   "tags": ["Next.js", "TypeScript", "Gemini API", "Zustand"]
 }, 
+{
+  "id": "ai-browser-gateway",
+  "name": "AI Browser Gateway",
+  "description": "A local FastAPI gateway that turns a browser-based AI assistant into an HTTP API using Playwright and Chrome automation.",
+  "url": "https://github.com/jaimzh/ai-browser-gateway",
+  "previewImage": "assets/browserimg.png",
+  "tags": ["Python", "FastAPI", "Playwright", "Browser Automation", "AI"]
+}, 
  {
   "id": "cortex-engine",
   "name": "Cortex",
