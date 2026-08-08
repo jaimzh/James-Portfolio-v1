@@ -1,0 +1,1054 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IntersectionObserver Playground</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #07111f;
+        --panel: #0d1b2d;
+        --panel-2: #12233a;
+        --text: #edf6ff;
+        --muted: #9cb0c9;
+        --line: #29415e;
+        --accent: #4de2b1;
+        --accent-soft: rgba(77, 226, 177, 0.12);
+        --warning: #ffc857;
+        --danger: #ff7185;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background:
+          radial-gradient(circle at top left, #143156 0, transparent 32rem),
+          var(--bg);
+        color: var(--text);
+        font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+        line-height: 1.5;
+      }
+
+      button,
+      input {
+        font: inherit;
+      }
+
+      .page-shell {
+        width: min(1120px, calc(100% - 2rem));
+        margin: 0 auto;
+        padding: 2.5rem 0 4rem;
+      }
+
+      .intro {
+        max-width: 760px;
+        margin-bottom: 1.5rem;
+      }
+
+      .eyebrow {
+        margin: 0 0 0.35rem;
+        color: var(--accent);
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: clamp(2rem, 6vw, 4.5rem);
+        line-height: 1;
+        letter-spacing: -0.05em;
+      }
+
+      .intro p:last-child {
+        color: var(--muted);
+        font-size: 1.05rem;
+      }
+
+      .layout {
+        display: grid;
+        grid-template-columns: minmax(240px, 320px) minmax(0, 1fr);
+        gap: 1rem;
+        align-items: start;
+      }
+
+      .controls,
+      .lab-panel,
+      .explanation {
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        background: rgba(13, 27, 45, 0.92);
+        box-shadow: 0 18px 60px rgba(0, 0, 0, 0.24);
+      }
+
+      .controls {
+        padding: 1rem;
+      }
+
+      .controls h2,
+      .lab-panel h2,
+      .explanation h2 {
+        margin: 0;
+        font-size: 1rem;
+      }
+
+      .control-group {
+        margin-top: 1.15rem;
+      }
+
+      .control-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        margin-bottom: 0.4rem;
+      }
+
+      .control-row output,
+      code {
+        color: var(--accent);
+        font-family: "Cascadia Code", Consolas, monospace;
+      }
+
+      input[type="range"] {
+        width: 100%;
+        accent-color: var(--accent);
+      }
+
+      .hint {
+        margin: 0.4rem 0 0;
+        color: var(--muted);
+        font-size: 0.82rem;
+      }
+
+      .preset-buttons {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.5rem;
+        margin-top: 1rem;
+      }
+
+      button {
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 0.65rem 0.75rem;
+        background: var(--panel-2);
+        color: var(--text);
+        cursor: pointer;
+      }
+
+      button:hover,
+      button:focus-visible {
+        border-color: var(--accent);
+      }
+
+      .code-preview {
+        margin: 1rem 0 0;
+        padding: 0.8rem;
+        border-radius: 10px;
+        overflow-x: auto;
+        background: #06101c;
+        color: #c9d8e8;
+        font: 0.78rem/1.55 "Cascadia Code", Consolas, monospace;
+        white-space: pre-wrap;
+      }
+
+      .lab-panel {
+        overflow: hidden;
+      }
+
+      .lab-header {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        align-items: center;
+        padding: 0.9rem 1rem;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .lab-status {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--muted);
+        font-size: 0.85rem;
+      }
+
+      .status-dot {
+        width: 0.65rem;
+        height: 0.65rem;
+        border-radius: 50%;
+        background: var(--muted);
+      }
+
+      .status-dot.on {
+        background: var(--accent);
+        box-shadow: 0 0 0 5px var(--accent-soft);
+      }
+
+      .lab-frame {
+        position: relative;
+      }
+
+      .scroll-root {
+        height: min(68vh, 680px);
+        min-height: 430px;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        scrollbar-color: var(--accent) var(--panel);
+        background:
+          linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+          #091523;
+        background-size: 28px 28px;
+      }
+
+      .scroll-content {
+        padding: 38vh clamp(1rem, 5vw, 3rem);
+      }
+
+      .watch-target {
+        min-height: 160px;
+        margin: 0 0 44vh;
+        padding: 1.2rem;
+        border: 2px solid #5a7290;
+        border-radius: 14px;
+        display: grid;
+        align-content: center;
+        background: rgba(18, 35, 58, 0.94);
+        transition: border-color 160ms ease, background 160ms ease, transform 160ms ease;
+      }
+
+      .watch-target:last-child {
+        margin-bottom: 20vh;
+      }
+
+      .watch-target.is-intersecting {
+        border-color: var(--accent);
+        background: rgba(32, 92, 79, 0.9);
+        transform: scale(1.015);
+      }
+
+      .target-number {
+        color: var(--muted);
+        font-size: 0.76rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      .watch-target strong {
+        margin-top: 0.2rem;
+        font-size: 1.3rem;
+      }
+
+      .ratio {
+        margin-top: 0.4rem;
+        color: var(--muted);
+        font-family: "Cascadia Code", Consolas, monospace;
+        font-size: 0.82rem;
+      }
+
+      .watch-target.is-intersecting .ratio {
+        color: var(--text);
+      }
+
+      .observer-zone {
+        position: absolute;
+        z-index: 5;
+        top: 40%;
+        right: 0;
+        bottom: 55%;
+        left: 0;
+        border-top: 2px dashed var(--warning);
+        border-bottom: 2px dashed var(--warning);
+        background: rgba(255, 200, 87, 0.1);
+        pointer-events: none;
+        transition: top 180ms ease, bottom 180ms ease;
+      }
+
+      .zone-label {
+        position: absolute;
+        top: 0;
+        left: 0.75rem;
+        transform: translateY(-100%);
+        padding: 0.2rem 0.5rem;
+        background: var(--warning);
+        color: #171103;
+        font-size: 0.72rem;
+        font-weight: 800;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+      }
+
+      .root-label {
+        position: absolute;
+        z-index: 6;
+        right: 0.75rem;
+        bottom: 0.75rem;
+        padding: 0.3rem 0.55rem;
+        border: 1px solid var(--accent);
+        border-radius: 7px;
+        background: rgba(7, 17, 31, 0.88);
+        color: var(--accent);
+        font: 0.74rem "Cascadia Code", Consolas, monospace;
+        pointer-events: none;
+      }
+
+      .event-log {
+        padding: 0.8rem 1rem;
+        border-top: 1px solid var(--line);
+        color: var(--muted);
+        font-size: 0.84rem;
+      }
+
+      .event-log strong {
+        color: var(--text);
+      }
+
+      .explanation {
+        margin-top: 1rem;
+        padding: 1rem;
+      }
+
+      .steps {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+        margin-top: 0.8rem;
+      }
+
+      .step {
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+
+      .step b {
+        display: block;
+        margin-bottom: 0.25rem;
+        color: var(--text);
+      }
+
+      .reveal-lab {
+        --demo-image-height: 220px;
+        margin-top: 1rem;
+        padding: 1rem;
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        background: rgba(13, 27, 45, 0.92);
+        box-shadow: 0 18px 60px rgba(0, 0, 0, 0.24);
+      }
+
+      .reveal-header {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: 1rem;
+      }
+
+      .reveal-header h2 {
+        margin: 0;
+        font-size: 1rem;
+      }
+
+      .reveal-header p {
+        margin: 0.25rem 0 0;
+        color: var(--muted);
+        font-size: 0.88rem;
+      }
+
+      .reveal-controls {
+        display: flex;
+        align-items: end;
+        gap: 0.75rem;
+        min-width: min(100%, 330px);
+      }
+
+      .height-control {
+        flex: 1;
+      }
+
+      .height-control .control-row {
+        font-size: 0.84rem;
+      }
+
+      .comparison-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.85rem;
+        margin-top: 1rem;
+        align-items: start;
+      }
+
+      .comparison-item h3 {
+        margin: 0 0 0.45rem;
+        font-size: 0.9rem;
+      }
+
+      .comparison-item > p {
+        min-height: 3.9em;
+        margin: 0.55rem 0 0;
+        color: var(--muted);
+        font-size: 0.78rem;
+      }
+
+      .demo-card {
+        border: 1px solid var(--line);
+        border-radius: 13px;
+        overflow: hidden;
+        background: var(--panel-2);
+      }
+
+      .demo-copy {
+        position: relative;
+        z-index: 2;
+        padding: 0.9rem;
+        background: var(--panel-2);
+      }
+
+      .demo-copy strong,
+      .demo-copy span {
+        display: block;
+      }
+
+      .demo-copy span {
+        margin-top: 0.25rem;
+        color: var(--muted);
+        font-size: 0.76rem;
+      }
+
+      .fake-image {
+        height: var(--demo-image-height);
+        display: grid;
+        place-items: center;
+        background:
+          radial-gradient(circle at 72% 25%, rgba(255, 200, 87, 0.92) 0 8%, transparent 9%),
+          linear-gradient(145deg, #2a5f82, #5c3b91 55%, #c04c72);
+        color: #fff;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+      }
+
+      /* Technique 1: the content determines the final height. */
+      .grid-reveal {
+        display: grid;
+        grid-template-rows: 0fr;
+        overflow: hidden;
+        transition: grid-template-rows 450ms cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .grid-reveal-inner {
+        min-height: 0;
+        overflow: hidden;
+      }
+
+      .reveal-lab.all-open .grid-reveal,
+      .grid-demo:hover .grid-reveal {
+        grid-template-rows: 1fr;
+      }
+
+      /* Technique 2: simpler, but the 220px ending height is a guess. */
+      .max-height-reveal {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 450ms cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .reveal-lab.all-open .max-height-reveal,
+      .max-demo:hover .max-height-reveal {
+        max-height: 220px;
+      }
+
+      /* Technique 3: a row reveals horizontally because its known axis is width. */
+      .row-demo {
+        display: flex;
+        min-height: 150px;
+      }
+
+      .row-demo .demo-copy {
+        flex: 1 1 auto;
+        min-width: 0;
+      }
+
+      .row-reveal {
+        flex: 0 0 0%;
+        min-width: 0;
+        overflow: hidden;
+        transition: flex-basis 450ms cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .row-reveal .fake-image {
+        width: 100%;
+        height: 100%;
+        min-width: 150px;
+      }
+
+      .reveal-lab.all-open .row-reveal,
+      .row-demo:hover .row-reveal {
+        flex-basis: 48%;
+      }
+
+      .technique-code {
+        display: block;
+        margin-top: 0.5rem;
+        color: var(--accent);
+        font: 0.72rem/1.45 "Cascadia Code", Consolas, monospace;
+      }
+
+      .anatomy-lab {
+        display: grid;
+        grid-template-columns: minmax(260px, 0.85fr) minmax(300px, 1.15fr);
+        gap: 1rem;
+        margin-top: 1.25rem;
+        padding-top: 1.25rem;
+        border-top: 1px solid var(--line);
+      }
+
+      .anatomy-visual h3,
+      .anatomy-code h3 {
+        margin: 0 0 0.65rem;
+        font-size: 0.9rem;
+      }
+
+      .anatomy-controls {
+        display: flex;
+        align-items: end;
+        gap: 0.6rem;
+        margin-bottom: 0.75rem;
+      }
+
+      .progress-control {
+        flex: 1;
+      }
+
+      .progress-control .control-row {
+        font-size: 0.82rem;
+      }
+
+      .anatomy-stage {
+        min-height: 360px;
+        padding: 1rem;
+        border: 1px dashed var(--line);
+        border-radius: 13px;
+        background:
+          linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+          #091523;
+        background-size: 20px 20px;
+      }
+
+      .anatomy-card {
+        position: relative;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: var(--panel-2);
+      }
+
+      .anatomy-card .demo-copy {
+        border-radius: 12px 12px 0 0;
+      }
+
+      .anatomy-wrapper {
+        display: grid;
+        grid-template-rows: 0fr;
+        overflow: hidden;
+        transition: grid-template-rows 900ms cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .anatomy-inner {
+        min-height: 0;
+        overflow: hidden;
+      }
+
+      .anatomy-inner .fake-image {
+        height: 180px;
+      }
+
+      .anatomy-card.xray .anatomy-wrapper,
+      .anatomy-card.xray .anatomy-inner {
+        overflow: visible;
+      }
+
+      .anatomy-card.xray .fake-image {
+        opacity: 0.5;
+        outline: 2px dashed var(--danger);
+        outline-offset: -2px;
+      }
+
+      .xray-note {
+        display: none;
+        margin-top: 195px;
+        color: var(--danger);
+        font: 0.74rem "Cascadia Code", Consolas, monospace;
+      }
+
+      .anatomy-card.xray + .xray-note {
+        display: block;
+      }
+
+      .anatomy-code pre {
+        margin: 0;
+        min-height: 360px;
+      }
+
+      .code-emphasis {
+        color: var(--warning);
+      }
+
+      @media (max-width: 800px) {
+        .layout {
+          grid-template-columns: 1fr;
+        }
+
+        .steps {
+          grid-template-columns: 1fr;
+        }
+
+        .reveal-header {
+          align-items: stretch;
+          flex-direction: column;
+        }
+
+        .reveal-controls {
+          width: 100%;
+        }
+
+        .comparison-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .anatomy-lab {
+          grid-template-columns: 1fr;
+        }
+
+        .comparison-item > p {
+          min-height: 0;
+        }
+
+        .scroll-root {
+          height: 62vh;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          scroll-behavior: auto !important;
+          transition: none !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page-shell">
+      <header class="intro">
+        <p class="eyebrow">Browser API laboratory</p>
+        <h1>See the observer watching.</h1>
+        <p>
+          Scroll inside the box. A target turns green only when it enters the yellow
+          observer zone. Change the margins and threshold to see what the options mean.
+        </p>
+      </header>
+
+      <div class="layout">
+        <aside class="controls" aria-labelledby="controls-title">
+          <h2 id="controls-title">Observer options</h2>
+
+          <div class="control-group">
+            <div class="control-row">
+              <label for="top-margin">Ignore from top</label>
+              <output id="top-output" for="top-margin">40%</output>
+            </div>
+            <input id="top-margin" type="range" min="0" max="80" value="40" />
+            <p class="hint">Creates the negative top <code>rootMargin</code>.</p>
+          </div>
+
+          <div class="control-group">
+            <div class="control-row">
+              <label for="bottom-margin">Ignore from bottom</label>
+              <output id="bottom-output" for="bottom-margin">55%</output>
+            </div>
+            <input id="bottom-margin" type="range" min="0" max="80" value="55" />
+            <p class="hint">Together, both margins create the yellow watch zone.</p>
+          </div>
+
+          <div class="control-group">
+            <div class="control-row">
+              <label for="threshold">Required visible amount</label>
+              <output id="threshold-output" for="threshold">0%</output>
+            </div>
+            <input id="threshold" type="range" min="0" max="1" value="0" step="0.05" />
+            <p class="hint"><code>0</code> means any contact; <code>1</code> means the entire target.</p>
+          </div>
+
+          <div class="preset-buttons" aria-label="Observer presets">
+            <button type="button" data-preset="portfolio">Portfolio settings</button>
+            <button type="button" data-preset="full">Whole root</button>
+          </div>
+
+          <pre class="code-preview" id="code-preview" aria-label="Current observer code"></pre>
+        </aside>
+
+        <section class="lab-panel" aria-labelledby="lab-title">
+          <div class="lab-header">
+            <h2 id="lab-title">Scrollable root element</h2>
+            <div class="lab-status" aria-live="polite">
+              <span class="status-dot" id="status-dot"></span>
+              <span id="status-text">No target in zone</span>
+            </div>
+          </div>
+
+          <div class="lab-frame">
+            <div class="scroll-root" id="scroll-root">
+              <div class="scroll-content">
+                <article class="watch-target" id="target-alpha">
+                  <span class="target-number">Target 01</span>
+                  <strong>Alpha section</strong>
+                  <span class="ratio">intersectionRatio: <span>0.000</span></span>
+                </article>
+
+                <article class="watch-target" id="target-beta">
+                  <span class="target-number">Target 02</span>
+                  <strong>Beta section</strong>
+                  <span class="ratio">intersectionRatio: <span>0.000</span></span>
+                </article>
+
+                <article class="watch-target" id="target-gamma">
+                  <span class="target-number">Target 03</span>
+                  <strong>Gamma section</strong>
+                  <span class="ratio">intersectionRatio: <span>0.000</span></span>
+                </article>
+              </div>
+            </div>
+
+            <div class="observer-zone" id="observer-zone" aria-hidden="true">
+              <span class="zone-label">Active observer zone</span>
+            </div>
+            <span class="root-label">root: #scroll-root</span>
+          </div>
+
+          <div class="event-log" aria-live="polite">
+            Latest callback: <strong id="event-message">waiting for movement…</strong>
+          </div>
+        </section>
+      </div>
+
+      <section class="explanation" aria-labelledby="mental-model-title">
+        <h2 id="mental-model-title">The mental model</h2>
+        <div class="steps">
+          <div class="step"><b>1. Choose a root</b>The bordered scroll box is the observer’s world.</div>
+          <div class="step"><b>2. Adjust its boundary</b>Negative root margins shrink that world to the yellow zone.</div>
+          <div class="step"><b>3. Watch targets</b>The callback runs when a watched target crosses the chosen threshold.</div>
+        </div>
+      </section>
+
+      <section class="reveal-lab" id="reveal-lab" aria-labelledby="reveal-title">
+        <div class="reveal-header">
+          <div>
+            <h2 id="reveal-title">Grid versus Flex reveal laboratory</h2>
+            <p>Hover one card, or open all three and change the content height.</p>
+          </div>
+
+          <div class="reveal-controls">
+            <div class="height-control">
+              <div class="control-row">
+                <label for="image-height">Image content height</label>
+                <output id="image-height-output" for="image-height">220px</output>
+              </div>
+              <input id="image-height" type="range" min="100" max="380" value="220" step="20" />
+            </div>
+            <button type="button" id="toggle-reveals" aria-pressed="false">Open all</button>
+          </div>
+        </div>
+
+        <div class="comparison-grid">
+          <div class="comparison-item">
+            <h3>1. Grid: natural height</h3>
+            <div class="demo-card grid-demo">
+              <div class="demo-copy">
+                <strong>Project with Grid</strong>
+                <span>The row animates from collapsed to its content size.</span>
+              </div>
+              <div class="grid-reveal">
+                <div class="grid-reveal-inner">
+                  <div class="fake-image">IMAGE</div>
+                </div>
+              </div>
+            </div>
+            <code class="technique-code">grid-template-rows: 0fr → 1fr</code>
+            <p>Change the slider to any height. Grid keeps adapting because there is no guessed pixel limit.</p>
+          </div>
+
+          <div class="comparison-item">
+            <h3>2. Flex card + max-height</h3>
+            <div class="demo-card max-demo">
+              <div class="demo-copy">
+                <strong>Project with a height cap</strong>
+                <span>This version can only open as far as 220px.</span>
+              </div>
+              <div class="max-height-reveal">
+                <div class="fake-image">IMAGE</div>
+              </div>
+            </div>
+            <code class="technique-code">max-height: 0 → 220px</code>
+            <p>Set the image above 220px. The rest is clipped, showing the cost of using a fixed maximum.</p>
+          </div>
+
+          <div class="comparison-item">
+            <h3>3. A real Flex row</h3>
+            <div class="demo-card row-demo">
+              <div class="demo-copy">
+                <strong>Project in a row</strong>
+                <span>The image opens sideways and squeezes this text.</span>
+              </div>
+              <div class="row-reveal">
+                <div class="fake-image">IMAGE</div>
+              </div>
+            </div>
+            <code class="technique-code">flex-basis: 0% → 48%</code>
+            <p>Flex row works when you want a horizontal reveal. It produces a different layout from an image opening below the text.</p>
+          </div>
+        </div>
+
+        <div class="anatomy-lab">
+          <div class="anatomy-visual">
+            <h3>Inside the Grid reveal</h3>
+            <div class="anatomy-controls">
+              <div class="progress-control">
+                <div class="control-row">
+                  <label for="grid-progress">Grid row</label>
+                  <output id="grid-progress-output" for="grid-progress">0fr</output>
+                </div>
+                <input id="grid-progress" type="range" min="0" max="1" value="0" step="0.01" />
+              </div>
+              <button type="button" id="play-grid">Play</button>
+              <button type="button" id="toggle-xray" aria-pressed="false">X-ray off</button>
+            </div>
+
+            <div class="anatomy-stage">
+              <div class="anatomy-card" id="anatomy-card">
+                <div class="demo-copy">
+                  <strong>Project title</strong>
+                  <span>The image is already below this content.</span>
+                </div>
+                <div class="anatomy-wrapper" id="anatomy-wrapper">
+                  <div class="anatomy-inner">
+                    <div class="fake-image">ALREADY HERE</div>
+                  </div>
+                </div>
+              </div>
+              <p class="xray-note">Clipping is disabled. The image overflows its 0fr row, proving it was never removed.</p>
+            </div>
+          </div>
+
+          <div class="anatomy-code">
+            <h3>Code to follow</h3>
+            <pre class="code-preview"><code>&lt;div class="card"&gt;
+  &lt;div class="content"&gt;Project title&lt;/div&gt;
+
+  &lt;div class="image-wrapper"&gt;
+    &lt;div class="image-inner"&gt;
+      &lt;img src="project.jpg" alt=""&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+.image-wrapper {
+  display: grid;
+  <span class="code-emphasis">grid-template-rows: 0fr;</span>
+  <span class="code-emphasis">overflow: hidden;</span>
+  transition: grid-template-rows 0.4s ease;
+}
+
+.image-inner {
+  <span class="code-emphasis">min-height: 0;</span>
+  overflow: hidden;
+}
+
+.card:hover .image-wrapper {
+  <span class="code-emphasis">grid-template-rows: 1fr;</span>
+}</code></pre>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      const scrollRoot = document.querySelector("#scroll-root");
+      const targets = [...document.querySelectorAll(".watch-target")];
+      const topInput = document.querySelector("#top-margin");
+      const bottomInput = document.querySelector("#bottom-margin");
+      const thresholdInput = document.querySelector("#threshold");
+      const topOutput = document.querySelector("#top-output");
+      const bottomOutput = document.querySelector("#bottom-output");
+      const thresholdOutput = document.querySelector("#threshold-output");
+      const observerZone = document.querySelector("#observer-zone");
+      const codePreview = document.querySelector("#code-preview");
+      const eventMessage = document.querySelector("#event-message");
+      const statusText = document.querySelector("#status-text");
+      const statusDot = document.querySelector("#status-dot");
+      const revealLab = document.querySelector("#reveal-lab");
+      const imageHeightInput = document.querySelector("#image-height");
+      const imageHeightOutput = document.querySelector("#image-height-output");
+      const toggleReveals = document.querySelector("#toggle-reveals");
+      const gridProgress = document.querySelector("#grid-progress");
+      const gridProgressOutput = document.querySelector("#grid-progress-output");
+      const anatomyWrapper = document.querySelector("#anatomy-wrapper");
+      const anatomyCard = document.querySelector("#anatomy-card");
+      const playGrid = document.querySelector("#play-grid");
+      const toggleXray = document.querySelector("#toggle-xray");
+
+      let observer;
+      let activeTargets = new Set();
+
+      function keepZoneVisible(changedInput) {
+        const top = Number(topInput.value);
+        const bottom = Number(bottomInput.value);
+
+        if (top + bottom <= 95) return;
+
+        if (changedInput === topInput) {
+          bottomInput.value = 95 - top;
+        } else {
+          topInput.value = 95 - bottom;
+        }
+      }
+
+      function updateStatus() {
+        const count = activeTargets.size;
+        statusDot.classList.toggle("on", count > 0);
+        statusText.textContent = count
+          ? `${count} target${count === 1 ? "" : "s"} in zone`
+          : "No target in zone";
+      }
+
+      function buildObserver() {
+        observer?.disconnect();
+        activeTargets.clear();
+        targets.forEach((target) => target.classList.remove("is-intersecting"));
+
+        const top = Number(topInput.value);
+        const bottom = Number(bottomInput.value);
+        const threshold = Number(thresholdInput.value);
+        const rootMargin = `-${top}% 0px -${bottom}% 0px`;
+
+        topOutput.value = `${top}%`;
+        bottomOutput.value = `${bottom}%`;
+        thresholdOutput.value = `${Math.round(threshold * 100)}%`;
+        observerZone.style.top = `${top}%`;
+        observerZone.style.bottom = `${bottom}%`;
+
+        codePreview.textContent = `const observer = new IntersectionObserver(callback, {\n  root: scrollRoot,\n  rootMargin: "${rootMargin}",\n  threshold: ${threshold}\n});\n\nobserver.observe(target);`;
+
+        observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              const ratio = entry.intersectionRatio;
+              const ratioLabel = entry.target.querySelector(".ratio span");
+              ratioLabel.textContent = ratio.toFixed(3);
+              entry.target.classList.toggle("is-intersecting", entry.isIntersecting);
+
+              if (entry.isIntersecting) {
+                activeTargets.add(entry.target.id);
+              } else {
+                activeTargets.delete(entry.target.id);
+              }
+
+              eventMessage.textContent = `${entry.target.id} → isIntersecting: ${entry.isIntersecting}, ratio: ${ratio.toFixed(3)}`;
+            });
+
+            updateStatus();
+          },
+          { root: scrollRoot, rootMargin, threshold }
+        );
+
+        targets.forEach((target) => observer.observe(target));
+        updateStatus();
+      }
+
+      [topInput, bottomInput].forEach((input) => {
+        input.addEventListener("input", () => {
+          keepZoneVisible(input);
+          buildObserver();
+        });
+      });
+
+      thresholdInput.addEventListener("input", buildObserver);
+
+      document.querySelectorAll("[data-preset]").forEach((button) => {
+        button.addEventListener("click", () => {
+          if (button.dataset.preset === "portfolio") {
+            topInput.value = 40;
+            bottomInput.value = 55;
+            thresholdInput.value = 0;
+          } else {
+            topInput.value = 0;
+            bottomInput.value = 0;
+            thresholdInput.value = 0;
+          }
+
+          buildObserver();
+        });
+      });
+
+      imageHeightInput.addEventListener("input", () => {
+        const height = `${imageHeightInput.value}px`;
+        revealLab.style.setProperty("--demo-image-height", height);
+        imageHeightOutput.value = height;
+      });
+
+      toggleReveals.addEventListener("click", () => {
+        const isOpen = revealLab.classList.toggle("all-open");
+        toggleReveals.setAttribute("aria-pressed", String(isOpen));
+        toggleReveals.textContent = isOpen ? "Close all" : "Open all";
+      });
+
+      function setGridProgress(value) {
+        const roundedValue = Number(value).toFixed(2).replace(/0+$/, "").replace(/\.$/, "");
+        anatomyWrapper.style.gridTemplateRows = `${value}fr`;
+        gridProgress.value = value;
+        gridProgressOutput.value = `${roundedValue}fr`;
+      }
+
+      gridProgress.addEventListener("input", () => {
+        anatomyWrapper.style.transition = "none";
+        setGridProgress(gridProgress.value);
+      });
+
+      gridProgress.addEventListener("change", () => {
+        anatomyWrapper.style.transition = "";
+      });
+
+      playGrid.addEventListener("click", () => {
+        anatomyWrapper.style.transition = "none";
+        setGridProgress(0);
+
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            anatomyWrapper.style.transition = "";
+            setGridProgress(1);
+          });
+        });
+      });
+
+      toggleXray.addEventListener("click", () => {
+        const isXray = anatomyCard.classList.toggle("xray");
+        toggleXray.setAttribute("aria-pressed", String(isXray));
+        toggleXray.textContent = isXray ? "X-ray on" : "X-ray off";
+      });
+
+      buildObserver();
+    </script>
+  </body>
+</html>
