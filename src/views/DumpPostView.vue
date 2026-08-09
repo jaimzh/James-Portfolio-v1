@@ -3,7 +3,7 @@ import { ArrowLeft } from '@lucide/vue'
 import { computed } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
 
-import MarkdownContent from '@/components/MarkdownContent.vue'
+import ReadingLayout from '@/components/ReadingLayout.vue'
 import SiteHeader from '@/components/SiteHeader.vue'
 import { getProjectByAttachedDump } from '@/data/projects'
 import { getDumpBySlug } from '@/utils/dumps'
@@ -16,7 +16,9 @@ const backDestination = computed(() =>
     ? { name: 'project-dump', params: { projectId: project.value.id } }
     : { name: 'dumps' },
 )
-const backLabel = computed(() => (project.value ? `Back to ${project.value.name}` : 'Back to Dumps'))
+const backLabel = computed(() =>
+  project.value ? `Back to ${project.value.name}` : 'Back to Dumps',
+)
 </script>
 
 <template>
@@ -33,7 +35,7 @@ const backLabel = computed(() => (project.value ? `Back to ${project.value.name}
         <time class="dump-date" :datetime="dump.date">{{ dump.displayDate }}</time>
       </div>
 
-      <MarkdownContent :html="dump.html" />
+      <ReadingLayout :html="dump.html" :headings="dump.headings" />
     </main>
 
     <main v-else class="section dump-post">
@@ -48,6 +50,7 @@ const backLabel = computed(() => (project.value ? `Back to ${project.value.name}
 
 <style scoped>
 .dump-post {
+  max-width: 1280px;
   padding-top: 8rem;
 }
 
@@ -57,6 +60,14 @@ const backLabel = computed(() => (project.value ? `Back to ${project.value.name}
   justify-content: space-between;
   gap: var(--space-md);
   margin-bottom: var(--space-xl);
+}
+
+.dump-post-topbar,
+.dump-post > .back-link,
+.dump-post > .section-heading {
+  max-width: var(--container);
+  margin-right: auto;
+  margin-left: auto;
 }
 
 .back-link {
@@ -79,5 +90,4 @@ const backLabel = computed(() => (project.value ? `Back to ${project.value.name}
   font-weight: var(--font-weight-medium);
   white-space: nowrap;
 }
-
 </style>

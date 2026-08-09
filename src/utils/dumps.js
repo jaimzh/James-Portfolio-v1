@@ -6,6 +6,52 @@ const markdown = new MarkdownIt({
   typographer: true,
 })
 
+function headingText(token) {
+  return (token.children || [])
+    .filter((child) => ['text', 'code_inline'].includes(child.type))
+    .map((child) => child.content)
+    .join('')
+}
+
+function headingId(text) {
+  return (
+    text
+      .normalize('NFKD')
+      .replace(/\p{Mark}/gu, '')
+      .toLowerCase()
+      .replace(/[^\p{Letter}\p{Number}]+/gu, '-')
+      .replace(/^-|-$/g, '') || 'section'
+  )
+}
+
+function renderMarkdown(content) {
+  const tokens = markdown.parse(content, {})
+  const headings = []
+  const usedIds = new Map()
+
+  tokens.forEach((token, index) => {
+    if (token.type !== 'heading_open') return
+
+    const level = Number(token.tag.slice(1))
+    const text = headingText(tokens[index + 1])
+    const baseId = headingId(text)
+    const duplicateCount = usedIds.get(baseId) || 0
+    const id = duplicateCount ? `${baseId}-${duplicateCount + 1}` : baseId
+
+    usedIds.set(baseId, duplicateCount + 1)
+    token.attrSet('id', id)
+
+    if (level >= 1 && level <= 3) {
+      headings.push({ id, text, level })
+    }
+  })
+
+  return {
+    html: markdown.renderer.render(tokens, markdown.options, {}),
+    headings,
+  }
+}
+
 const dumpFiles = import.meta.glob('../content/dumps/*.md', {
   eager: true,
   import: 'default',
@@ -76,6 +122,7 @@ function normalizeDump(path, rawContent) {
   const { data, content } = parseFrontmatter(rawContent)
   const slug = data.slug || slugFromPath(path)
   const kind = data.kind || 'markdown'
+  const renderedContent = kind === 'markdown' ? renderMarkdown(content) : { html: '', headings: [] }
 
   return {
     slug,
@@ -84,7 +131,8 @@ function normalizeDump(path, rawContent) {
     displayDate: formatDisplayDate(data.date),
     kind,
     url: data.url || '',
-    html: kind === 'markdown' ? markdown.render(content) : '',
+    html: renderedContent.html,
+    headings: renderedContent.headings,
   }
 }
 

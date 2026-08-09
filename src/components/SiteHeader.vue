@@ -120,12 +120,19 @@ onBeforeUnmount(() => {
     color var(--transition-fast);
 }
 
+
+
+.nav-list a:hover{
+  opacity: 80%;
+}
+
 .nav-list a:hover,
 .nav-list a:focus-visible,
 .nav-list a.active {
   background: var(--accent);
   color: var(--on-accent);
   outline: none;
+ 
 }
 
 .theme-toggle {

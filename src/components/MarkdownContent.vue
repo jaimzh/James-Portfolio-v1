@@ -28,6 +28,12 @@ defineProps({
   margin-top: 0;
 }
 
+.markdown-body :deep(h1[id]),
+.markdown-body :deep(h2[id]),
+.markdown-body :deep(h3[id]) {
+  scroll-margin-top: 6rem;
+}
+
 .markdown-body :deep(p) {
   margin-bottom: var(--space-md);
   color: var(--text-secondary);

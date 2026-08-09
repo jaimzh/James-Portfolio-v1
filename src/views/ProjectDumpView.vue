@@ -3,7 +3,7 @@ import { ArrowLeft, ArrowUpRight } from '@lucide/vue'
 import { computed } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
 
-import MarkdownContent from '@/components/MarkdownContent.vue'
+import ReadingLayout from '@/components/ReadingLayout.vue'
 import SiteHeader from '@/components/SiteHeader.vue'
 import { getProjectById } from '@/data/projects'
 import { getDumpBySlug } from '@/utils/dumps'
@@ -18,47 +18,48 @@ const linkedDump = computed(() => getDumpBySlug(project.value?.attachedDump))
     <SiteHeader />
 
     <main v-if="project" class="section project-dump">
-      <RouterLink class="back-link" :to="{ path: '/', hash: '#projects' }">
-        <ArrowLeft :size="16" :stroke-width="2" aria-hidden="true" />
-        Back to Projects
-      </RouterLink>
+      <div class="project-primary">
+        <RouterLink class="back-link" :to="{ path: '/', hash: '#projects' }">
+          <ArrowLeft :size="16" :stroke-width="2" aria-hidden="true" />
+          Back to Projects
+        </RouterLink>
 
-      <article class="project-overview">
-        <div class="project-copy">
-          <div class="project-heading-row">
-            <h1 class="project-title">{{ project.name }}</h1>
+        <article class="project-overview">
+          <div class="project-copy">
+            <div class="project-heading-row">
+              <h1 class="project-title">{{ project.name }}</h1>
 
-            <a
-              class="project-link"
-              :href="project.url"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Visit project
-              <ArrowUpRight :size="15" :stroke-width="2" aria-hidden="true" />
-            </a>
+              <a class="project-link" :href="project.url" target="_blank" rel="noopener noreferrer">
+                Visit project
+                <ArrowUpRight :size="15" :stroke-width="2" aria-hidden="true" />
+              </a>
+            </div>
+
+            <p class="project-description">{{ project.description }}</p>
+
+            <div class="project-tags" aria-label="Project tags">
+              <span v-for="tag in project.tags" :key="tag" class="project-tag">{{ tag }}</span>
+            </div>
           </div>
 
-          <p class="project-description">{{ project.description }}</p>
-
-          <div class="project-tags" aria-label="Project tags">
-            <span v-for="tag in project.tags" :key="tag" class="project-tag">{{ tag }}</span>
-          </div>
-        </div>
-
-        <img
-          class="project-preview"
-          :src="project.previewImage"
-          :alt="`${project.name} preview`"
-        />
-      </article>
+          <img
+            class="project-preview"
+            :src="project.previewImage"
+            :alt="`${project.name} preview`"
+          />
+        </article>
+      </div>
 
       <div v-if="linkedDump" class="linked-dump">
         <time v-if="linkedDump.date" class="dump-date" :datetime="linkedDump.date">
           {{ linkedDump.displayDate }}
         </time>
 
-        <MarkdownContent v-if="linkedDump.kind === 'markdown'" :html="linkedDump.html" />
+        <ReadingLayout
+          v-if="linkedDump.kind === 'markdown'"
+          :html="linkedDump.html"
+          :headings="linkedDump.headings"
+        />
 
         <a
           v-else
@@ -87,7 +88,13 @@ const linkedDump = computed(() => getDumpBySlug(project.value?.attachedDump))
 
 <style scoped>
 .project-dump {
+  max-width: 1280px;
   padding-top: 8rem;
+}
+
+.project-primary {
+  max-width: var(--container);
+  margin-inline: auto;
 }
 
 .back-link,
@@ -176,7 +183,9 @@ const linkedDump = computed(() => getDumpBySlug(project.value?.attachedDump))
 
 .dump-date {
   display: block;
+  max-width: var(--container);
   margin-bottom: var(--space-lg);
+  margin-inline: auto;
   color: var(--text-muted);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
