@@ -115,15 +115,19 @@ onBeforeUnmount(() => {
   font-weight: var(--font-weight-medium);
   padding: 0.35rem 0.7rem;
   border-radius: var(--radius-xs);
+  opacity: 100%;
   transition:
     background var(--transition-fast),
-    color var(--transition-fast);
+    color var(--transition-fast),
+    opacity 0.8s ease;
 }
 
 
 
 .nav-list a:hover{
-  opacity: 90%;
+  opacity: 85%;
+
+  
 }
 
 .nav-list a:hover,
@@ -132,6 +136,7 @@ onBeforeUnmount(() => {
   background: var(--accent);
   color: var(--on-accent);
   outline: none;
+
  
 }
 

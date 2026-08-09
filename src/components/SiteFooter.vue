@@ -1,6 +1,13 @@
 <script setup>
 import resumeUrl from '@/assets/James-Henshaw-resume.pdf'
 
+defineProps({
+  showLinks: {
+    type: Boolean,
+    default: true,
+  },
+})
+
 const socialLinks = [
   {
     label: 'GitHub',
@@ -30,7 +37,7 @@ const socialLinks = [
 
 <template>
   <footer class="site-footer">
-    <ul class="footer-socials">
+    <ul v-if="showLinks" class="footer-socials">
       <li v-for="link in socialLinks" :key="link.label">
         <a
           :href="link.href"

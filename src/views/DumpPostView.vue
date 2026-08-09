@@ -4,6 +4,7 @@ import { computed } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
 
 import ReadingLayout from '@/components/ReadingLayout.vue'
+import SiteFooter from '@/components/SiteFooter.vue'
 import SiteHeader from '@/components/SiteHeader.vue'
 import { getProjectByAttachedDump } from '@/data/projects'
 import { getDumpBySlug } from '@/utils/dumps'
@@ -45,11 +46,21 @@ const backLabel = computed(() =>
       </RouterLink>
       <h1 class="section-heading">Dump not found.</h1>
     </main>
+
+    <SiteFooter :show-links="false" />
   </div>
 </template>
 
 <style scoped>
+.dump-post-view {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
 .dump-post {
+  width: 100%;
+  flex: 1;
   max-width: 1280px;
   padding-top: 8rem;
 }
