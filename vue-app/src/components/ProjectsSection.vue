@@ -1,8 +1,9 @@
 <script setup>
-import { computed, ref } from 'vue'
+import { computed, nextTick, ref } from 'vue'
 
 import { projects } from '@/data/projects'
 import ProjectCard from '@/components/ProjectCard.vue'
+import { animateProjectCards } from '@/composables/usePortfolioAnimations'
 
 const pageSize = 5
 const currentPage = ref(0)
@@ -17,19 +18,25 @@ const visibleProjects = computed(() => {
 const isFirstPage = computed(() => currentPage.value === 0)
 const isLastPage = computed(() => currentPage.value === pageCount.value - 1)
 
-function goToPage(page) {
+async function goToPage(page) {
   currentPage.value = page
+  await nextTick()
+  animateProjectCards()
 }
 
-function goToPreviousPage() {
+async function goToPreviousPage() {
   if (!isFirstPage.value) {
     currentPage.value -= 1
+    await nextTick()
+    animateProjectCards()
   }
 }
 
-function goToNextPage() {
+async function goToNextPage() {
   if (!isLastPage.value) {
     currentPage.value += 1
+    await nextTick()
+    animateProjectCards()
   }
 }
 </script>

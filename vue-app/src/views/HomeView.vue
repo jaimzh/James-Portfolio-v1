@@ -1,13 +1,20 @@
 <script setup>
+import { ref } from 'vue'
+
 import HeroCard from '@/components/HeroCard.vue'
 import ProjectsSection from '@/components/ProjectsSection.vue'
 import SiteFooter from '@/components/SiteFooter.vue'
 import SiteHeader from '@/components/SiteHeader.vue'
 import TechStack from '@/components/TechStack.vue'
+import { usePortfolioAnimations } from '@/composables/usePortfolioAnimations'
+
+const homeView = ref(null)
+
+usePortfolioAnimations(homeView)
 </script>
 
 <template>
-  <div class="home-view">
+  <div ref="homeView" class="home-view">
     <SiteHeader />
 
     <main>
