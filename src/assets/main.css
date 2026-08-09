@@ -22,6 +22,8 @@
   --hero-pattern-color: #000000;
   --hero-pattern-text: var(--bg);
   --avatar-border: #ffffff;
+  --code-canvas-logo: #94a3b8;
+  --code-canvas-logo-hover: #000000;
 
   /* Token aliases */
   --color-page: var(--bg);
@@ -100,6 +102,8 @@
   --hero-shadow: none;
   --hero-pattern-color: #ffffff;
   --hero-pattern-text: #000000;
+  --code-canvas-logo: #808080;
+  --code-canvas-logo-hover: #ffffff;
 
   --color-surface-muted: #111111;
 

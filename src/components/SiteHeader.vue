@@ -123,7 +123,7 @@ onBeforeUnmount(() => {
 
 
 .nav-list a:hover{
-  opacity: 80%;
+  opacity: 90%;
 }
 
 .nav-list a:hover,

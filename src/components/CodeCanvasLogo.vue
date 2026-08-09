@@ -1,0 +1,29 @@
+<template>
+  <svg
+    viewBox="-2 -2 44 44"
+    fill="none"
+    aria-hidden="true"
+    focusable="false"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <g fill="currentColor" stroke="currentColor">
+      <rect
+        x="0.5"
+        y="0.5"
+        width="39"
+        height="39"
+        rx="3.5"
+        fill="none"
+        stroke-width="1"
+        stroke-dasharray="4 3"
+      />
+
+      <rect x="-2" y="-2" width="6" height="6" stroke="none" />
+      <rect x="36" y="-2" width="6" height="6" stroke="none" />
+      <rect x="-2" y="36" width="6" height="6" stroke="none" />
+      <rect x="36" y="36" width="6" height="6" stroke="none" />
+
+      <rect x="6" y="6" width="28" height="28" rx="4" stroke="none" />
+    </g>
+  </svg>
+</template>

@@ -2,7 +2,7 @@
 import { FileText, LinkIcon } from '@lucide/vue'
 import { RouterLink } from 'vue-router'
 
-import codeCanvasLogo from '@/assets/code-canvas-logo.svg'
+import CodeCanvasLogo from '@/components/CodeCanvasLogo.vue'
 import { getDumpHref, opensExternally } from '@/utils/dumps'
 
 defineProps({
@@ -30,12 +30,7 @@ function kindIcon(kind) {
     <div class="dump-line">
       <span class="dump-title-group">
         <span class="dump-source-icon">
-          <img
-            v-if="dump.kind === 'code-canvas'"
-            :src="codeCanvasLogo"
-            alt="Code Canvas"
-            class="dump-source-logo"
-          />
+          <CodeCanvasLogo v-if="dump.kind === 'code-canvas'" class="dump-source-logo" />
           <component v-else :is="kindIcon(dump.kind)" :size="14" :stroke-width="2" />
         </span>
 
@@ -120,16 +115,16 @@ function kindIcon(kind) {
 }
 
 .dump-source-logo {
-  width: 18px;
-  height: 18px;
+  width: 14px;
+  height: 14px;
   max-width: none;
-  object-fit: contain;
-  transition: filter var(--transition-fast);
+  color: var(--code-canvas-logo);
+  transition: color var(--transition-fast);
 }
 
 .dump-card:hover .dump-source-logo,
 .dump-card:focus-visible .dump-source-logo {
-  filter: brightness(0);
+  color: var(--code-canvas-logo-hover);
 }
 
 .dump-title {
