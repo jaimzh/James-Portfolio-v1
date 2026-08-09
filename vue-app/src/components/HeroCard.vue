@@ -3,7 +3,6 @@ import { ref } from 'vue'
 
 import avatarImage from '@/assets/hero/animatedframe3.svg'
 import glassesImage from '@/assets/hero/staticglasses.svg'
-import patternImage from '@/assets/hero/Vector.svg'
 
 const glassesActive = ref(false)
 
@@ -25,7 +24,18 @@ function toggleGlasses() {
 
 <template>
   <article class="hero-card">
-    <img :src="patternImage" alt="" aria-hidden="true" class="hero-pattern" />
+    <svg
+      class="hero-pattern"
+      viewBox="0 0 8480 4940"
+      fill="none"
+      preserveAspectRatio="xMidYMid slice"
+      aria-hidden="true"
+    >
+      <path d="M479.086 0 8479.5 366.5l-432.87 4215.22L.14 3471.62 479.086 0Z" />
+      <path d="m0 3503 8019.85 735.5v567.67L0 3503Z" />
+      <path d="m0 3633 8046.49 1110.1-16.1 116.65L0 3633Z" />
+      <path d="m0 3713 8046.49 1110.1-16.1 116.65L0 3713Z" />
+    </svg>
 
     <div class="hero-wrapper">
       <header class="hero-header">
@@ -90,10 +100,10 @@ function toggleGlasses() {
   width: 100%;
   min-height: 400px;
   overflow: hidden;
-  border: 2px solid var(--border);
+  border: 2px solid var(--hero-border);
   border-radius: var(--radius-md);
   background: var(--card-bg);
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--hero-shadow);
 }
 
 .hero-pattern {
@@ -102,6 +112,8 @@ function toggleGlasses() {
   z-index: 0;
   width: 125%;
   height: 125%;
+  color: var(--hero-pattern-color);
+  fill: currentColor;
   object-fit: cover;
   object-position: center;
   pointer-events: none;

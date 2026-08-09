@@ -17,6 +17,9 @@
   --focus: #94a3b8;
   --nav-bg: rgb(255 255 255 / 0.85);
   --nav-shadow: 0 4px 20px rgb(0 0 0 / 0.08);
+  --hero-border: var(--border);
+  --hero-shadow: var(--shadow-md);
+  --hero-pattern-color: #000000;
   --hero-pattern-text: var(--bg);
   --avatar-border: #ffffff;
 
@@ -93,13 +96,37 @@
   --focus: #888888;
   --nav-bg: rgb(0 0 0 / 0.78);
   --nav-shadow: 0 0 0 1px rgb(255 255 255 / 0.08);
-  --hero-pattern-text: #ededed;
+  --hero-border: transparent;
+  --hero-shadow: none;
+  --hero-pattern-color: #ffffff;
+  --hero-pattern-text: #000000;
 
   --color-surface-muted: #111111;
 
   --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.7);
   --shadow-md: 0 0 0 1px rgb(255 255 255 / 0.08);
   --shadow-lg: 0 0 0 1px rgb(255 255 255 / 0.1);
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-old(root) {
+  z-index: 1;
+}
+
+::view-transition-new(root) {
+  z-index: 2;
+}
+
+.theme-transitioning *,
+.theme-transitioning *::before,
+.theme-transitioning *::after {
+  animation-play-state: paused !important;
+  transition: none !important;
 }
 
 *,
