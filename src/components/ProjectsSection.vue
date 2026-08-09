@@ -44,7 +44,7 @@ async function goToNextPage() {
 <template>
   <div class="section">
     <h2 id="projects-title" class="section-heading">Projects</h2>
-    <p class="section-info">A curated selection of recent projects and designs</p>
+    <p class="section-info">A collection of cool things, experiments, and ideas I’ve been tinkering with.</p>
 
     <div class="projects-grid">
       <ProjectCard v-for="project in visibleProjects" :key="project.id" :project="project" />

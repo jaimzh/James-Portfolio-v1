@@ -1,4 +1,10 @@
 <script setup>
+import { WandSparkles } from '@lucide/vue'
+
+import { useTheme } from '@/composables/useTheme'
+
+const { isDark } = useTheme()
+
 const stackItems = [
   {
     name: 'Python',
@@ -28,18 +34,32 @@ const stackItems = [
     name: 'Figma',
     icon: `<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 3H9a3 3 0 0 0 0 6m3-6v6m0-6h3a3 3 0 0 1 0 6m-3 0H9m3 0h3m-3 0v6m-3-6a3 3 0 0 0 0 6m6-6a3 3 0 1 1-3 3 3 3 0 0 1 3-3ZM12 15H9m3 0v3a3 3 0 1 1-3-3"/></svg>`,
   },
+
+  {
+    name: 'Magic',
+    isMagic: true,
+    iconComponent: WandSparkles,
+  },
 ]
 </script>
 
 <template>
   <div>
-    <h2 id="stack-title" class="section-heading">Tech Stack</h2>
+    <h2 id="stack-title" class="section-heading">Stack</h2>
     <p class="section-info">Tools, frameworks, and languages I use.</p>
 
     <ul class="tech-list" aria-label="Tech stack">
       <li v-for="item in stackItems" :key="item.name">
-        <span class="tech-icon" v-html="item.icon"></span>
-        {{ item.name }}
+        <span v-if="item.icon" class="tech-icon" v-html="item.icon"></span>
+        <component
+          :is="item.iconComponent"
+          v-else
+          class="tech-icon"
+          :stroke-width="1.8"
+          aria-hidden="true"
+        />
+        <span v-if="item.isMagic">{{ isDark ? 'Light Magic' : 'Dark Magic' }}</span>
+        <span v-else>{{ item.name }}</span>
       </li>
     </ul>
   </div>
