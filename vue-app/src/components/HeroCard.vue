@@ -165,7 +165,7 @@ function toggleGlasses() {
   width: 150px;
   height: 150px;
   padding: 0.4rem;
-  border: 4px solid var(--bg);
+  border: 4px solid var(--avatar-border);
   border-radius: 50%;
   object-fit: cover;
 }
@@ -191,7 +191,7 @@ function toggleGlasses() {
   align-items: center;
   gap: 0.05em;
   height: calc(1.75rem * 1.6);
-  color: var(--bg);
+  color: var(--hero-pattern-text);
   font-size: 1.75rem;
   font-weight: var(--font-weight-bold);
   letter-spacing: -0.02em;
@@ -205,7 +205,7 @@ function toggleGlasses() {
 .hero-name-cursor {
   display: inline-block;
   margin-left: 1px;
-  color: var(--bg);
+  color: var(--hero-pattern-text);
   font-size: 1.1em;
   font-weight: 300;
   line-height: 1;
@@ -214,7 +214,7 @@ function toggleGlasses() {
 }
 
 .hero-bio {
-  color: var(--bg);
+  color: var(--hero-pattern-text);
   font-size: 0.95rem;
   line-height: 1.7;
 }
@@ -241,7 +241,7 @@ function toggleGlasses() {
 }
 
 .btn-secondary {
-  border: 1px solid #1f2937;
+  border: 1px solid var(--accent);
   background: var(--card-bg);
   color: var(--text-primary);
   box-shadow: var(--shadow-sm);

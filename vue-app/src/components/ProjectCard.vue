@@ -88,7 +88,7 @@ defineProps({
 
 .project-card:hover,
 .project-card:focus-visible {
-  border-color: var(--accent);
+  border-color: var(--border-hover);
   box-shadow: var(--shadow-md);
   transform: translateY(-4px);
 }

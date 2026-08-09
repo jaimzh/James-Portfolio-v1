@@ -86,7 +86,7 @@ const socialLinks = [
 .social-link:focus-visible {
   border-color: var(--accent);
   background: var(--accent);
-  color: #fff;
+  color: var(--on-accent);
   box-shadow: var(--shadow-md);
   transform: translateY(-2px);
 }

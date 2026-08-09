@@ -1,6 +1,9 @@
 <script setup>
+import { Moon, Sun } from '@lucide/vue'
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
+
+import { useTheme } from '@/composables/useTheme'
 
 const navLinks = [
   { label: 'Home', to: { path: '/', hash: '#hero' }, sectionId: 'hero' },
@@ -11,6 +14,7 @@ const navLinks = [
 const route = useRoute()
 const activeSection = ref('hero')
 const isDumpsRoute = computed(() => route.path.startsWith('/dumps'))
+const { isDark, toggleTheme } = useTheme()
 
 let navObserver
 
@@ -55,6 +59,17 @@ onBeforeUnmount(() => {
           <RouterLink :class="{ active: isDumpsRoute }" to="/dumps">Dumps</RouterLink>
         </li>
       </ul>
+
+      <button
+        class="theme-toggle"
+        type="button"
+        :aria-label="isDark ? 'Switch to light mode' : 'Switch to dark mode'"
+        :title="isDark ? 'Switch to light mode' : 'Switch to dark mode'"
+        @click="toggleTheme"
+      >
+        <Sun v-if="isDark" :size="15" :stroke-width="2" aria-hidden="true" />
+        <Moon v-else :size="15" :stroke-width="2" aria-hidden="true" />
+      </button>
     </nav>
   </header>
 </template>
@@ -66,18 +81,24 @@ onBeforeUnmount(() => {
   left: 50%;
   z-index: 100;
   width: auto;
-  padding: var(--space-md);
+  padding: var(--space-sm);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
-  background: rgb(255 255 255 / 0.85);
-  box-shadow: 0 4px 20px rgb(0 0 0 / 0.08);
+  background: var(--nav-bg);
+  box-shadow: var(--nav-shadow);
   transform: translateX(-50%);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
+  transition:
+    background-color var(--transition-base),
+    border-color var(--transition-base),
+    box-shadow var(--transition-base);
 }
 
 .navbar {
   display: flex;
+  align-items: center;
+  gap: var(--space-xs);
   justify-content: center;
 }
 
@@ -103,7 +124,31 @@ onBeforeUnmount(() => {
 .nav-list a:focus-visible,
 .nav-list a.active {
   background: var(--accent);
-  color: #fff;
+  color: var(--on-accent);
+  outline: none;
+}
+
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xs);
+  background: transparent;
+  color: var(--text-secondary);
+  transition:
+    background var(--transition-fast),
+    border-color var(--transition-fast),
+    color var(--transition-fast);
+}
+
+.theme-toggle:hover,
+.theme-toggle:focus-visible {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--on-accent);
   outline: none;
 }
 

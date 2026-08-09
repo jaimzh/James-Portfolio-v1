@@ -32,6 +32,6 @@ import { dumps } from '@/utils/dumps'
 
 .dumps-list {
   display: grid;
-  margin-top: var(--space-lg);
+  margin-top: var(--space-2xl);
 }
 </style>

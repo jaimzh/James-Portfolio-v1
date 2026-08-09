@@ -3,15 +3,22 @@
 :root {
   color-scheme: light;
 
-  /* Colors */
+  /* Theme colors */
   --bg: #f6f6f6;
   --card-bg: #ffffff;
   --text-primary: #0f172a;
   --text-secondary: #475569;
   --text-muted: #94a3b8;
   --border: rgb(0 0 0 / 0.08);
+  --border-hover: rgb(0 0 0 / 0.24);
   --accent: #04080f;
+  --accent-hover: #101318;
+  --on-accent: #ffffff;
   --focus: #94a3b8;
+  --nav-bg: rgb(255 255 255 / 0.85);
+  --nav-shadow: 0 4px 20px rgb(0 0 0 / 0.08);
+  --hero-pattern-text: var(--bg);
+  --avatar-border: #ffffff;
 
   /* Token aliases */
   --color-page: var(--bg);
@@ -70,6 +77,31 @@
   --transition-smooth: 0.4s var(--ease-standard);
 }
 
+:root[data-theme='dark'] {
+  color-scheme: dark;
+
+  --bg: #000000;
+  --card-bg: #0a0a0a;
+  --text-primary: #ededed;
+  --text-secondary: #a1a1a1;
+  --text-muted: #666666;
+  --border: rgb(255 255 255 / 0.14);
+  --border-hover: rgb(255 255 255 / 0.32);
+  --accent: #ffffff;
+  --accent-hover: #ededed;
+  --on-accent: #000000;
+  --focus: #888888;
+  --nav-bg: rgb(0 0 0 / 0.78);
+  --nav-shadow: 0 0 0 1px rgb(255 255 255 / 0.08);
+  --hero-pattern-text: #ededed;
+
+  --color-surface-muted: #111111;
+
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.7);
+  --shadow-md: 0 0 0 1px rgb(255 255 255 / 0.08);
+  --shadow-lg: 0 0 0 1px rgb(255 255 255 / 0.1);
+}
+
 *,
 *::before,
 *::after {
@@ -93,6 +125,9 @@ body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  transition:
+    background-color var(--transition-base),
+    color var(--transition-base);
 }
 
 button,

@@ -1,7 +1,13 @@
 <script setup>
 import { RouterView } from 'vue-router'
+
+import { useTheme } from '@/composables/useTheme'
+
+useTheme()
 </script>
 
 <template>
-  <RouterView />
+  <div class="app-shell">
+    <RouterView />
+  </div>
 </template>
