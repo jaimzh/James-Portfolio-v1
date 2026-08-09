@@ -3,6 +3,7 @@ import { ArrowLeft } from '@lucide/vue'
 import { computed } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
 
+import MarkdownContent from '@/components/MarkdownContent.vue'
 import SiteHeader from '@/components/SiteHeader.vue'
 import { getProjectByAttachedDump } from '@/data/projects'
 import { getDumpBySlug } from '@/utils/dumps'
@@ -32,7 +33,7 @@ const backLabel = computed(() => (project.value ? `Back to ${project.value.name}
         <time class="dump-date" :datetime="dump.date">{{ dump.displayDate }}</time>
       </div>
 
-      <article class="markdown-body" v-html="dump.html"></article>
+      <MarkdownContent :html="dump.html" />
     </main>
 
     <main v-else class="section dump-post">
@@ -79,25 +80,4 @@ const backLabel = computed(() => (project.value ? `Back to ${project.value.name}
   white-space: nowrap;
 }
 
-.markdown-body {
-  color: var(--text-primary);
-}
-
-.markdown-body :deep(h1),
-.markdown-body :deep(h2),
-.markdown-body :deep(h3) {
-  margin-top: var(--space-xl);
-  margin-bottom: var(--space-sm);
-  line-height: 1.2;
-}
-
-.markdown-body :deep(p) {
-  margin-bottom: var(--space-md);
-  color: var(--text-secondary);
-}
-
-.markdown-body :deep(a) {
-  color: var(--accent);
-  font-weight: var(--font-weight-semibold);
-}
 </style>

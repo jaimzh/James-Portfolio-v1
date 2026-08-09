@@ -1,126 +1,58 @@
-# 🪄 Profile Card — HNG Frontend Project (Stage 1)
+# James Henshaw Portfolio
 
-  
+A personal portfolio built with Vue and Vite. It includes animated project cards, project-linked Markdown dumps, standalone notes, theme switching, and responsive layouts.
 
-A clean, responsive, and accessible **Profile Card** with multi-page support built using **semantic HTML**, **modern CSS**, and **vanilla JavaScript**.  
+## Project structure
 
-This project was created for **HNG Stage 1** as part of the Frontend Wizards track.  
+```text
+src/
+├── assets/          Images, SVG artwork, global styles, and the résumé
+├── components/      Reusable interface components
+├── composables/     Theme and animation behavior
+├── content/dumps/   Markdown posts and external dump metadata
+├── data/            Project information
+├── router/          Application routes
+├── utils/           Markdown loading and dump lookup helpers
+└── views/           Route-level page components
 
-  
-
-It now includes **About Me** and **Contact** pages while keeping the **Profile Card** design consistent. All pages are fully accessible, responsive, and maintain proper `data-testid` attributes for automated testing.
-
-  
-
----
-
-  
-
-## 🌍 Live Demo
-
-  
-
-🔗 **Live URL:** [https://jaimzh.github.io/HNG-stage0-frontend-profile-card/](https://jaimzh.github.io/HNG-stage0-frontend-profile-card/)
-
-
-
-  
-
----
-
-  
-
-## 🧩 Features
-
-  
-
-- ✅ **Semantic HTML** with accessibility in mind  
-
-- 💻 **Responsive layout** (mobile → tablet → desktop)  
-
-- ⏱️ **Live time in milliseconds** displayed on the Profile page  
-
-- 🧠 **Dynamic `data-testid` attributes** for automated grading/testing  
-
-- 📸 **Avatar with descriptive alt text** (Profile page)  
-
-- 🔗 **Social links** (GitHub, X/Twitter) that open in new tabs  
-
-- 🎨 **Modern styling** using Flexbox, consistent card design, and vector patterns  
-
-- 📝 **About Me page** with reflections, goals, confidence areas, and future note  
-
-- 📬 **Contact page** with validated form fields, error messages, and success confirmation  
-
-  
-
----
-
-  
-
-## 📂 Project Structure
-
-  
-
+public/              Static favicon and manifest files
+legacy-vanilla/      Archived version of the original vanilla website
 ```
 
-  
+## Development
 
-📦 profile-card
+```sh
+npm install
+npm run dev
+```
 
-├── index.html       # Main Profile Card page
+## Production build
 
-├── about.html       # About Me page with reflections
+```sh
+npm run build
+npm run preview
+```
 
-├── contact.html     # Contact page with validated form
+## Adding a project
 
-├── style.css        # Shared responsive CSS styling
+1. Add a descriptively named preview image to `src/assets/projects/`.
+2. Import the image in `src/data/projects.js`.
+3. Add the project object to the exported `projects` array.
+4. If the project has a Markdown dump, add `attachedDump` with the Markdown filename without `.md`.
 
-├── script.js        # Handles live time & form validation
+## Adding a dump
 
-└── assets/          # Images & vector patterns
+Add a Markdown file to `src/content/dumps/`:
 
-  
-
-````
-
-  
-
+```md
+---
+title: 'Building Something'
+date: '2026-08-09'
 ---
 
-  
+# Building Something
 
-## ⚙️ How to Run Locally
+Write the article here.
+```
 
-  
-
-1. **Clone this repo**
-
-   ```bash
-
-   git clone https://github.com/yourusername/profile-card.git
-
-   cd profile-card
-
-````
-
-  
-
-2. **Open the project**
-
-  
-
-   * Simply open `index.html`, `about.html`, or `contact.html` in your browser.
-
-     *(No build steps or dependencies needed — it’s plain HTML/CSS/JS.)*
-
-  
-
----
-
-  
-
-
-
-  
-
+Markdown is the default dump kind. External entries can use `kind: 'external'`, while Code Canvas entries can use `kind: 'code-canvas'` and provide a `url`.

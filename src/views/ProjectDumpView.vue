@@ -3,6 +3,7 @@ import { ArrowLeft, ArrowUpRight } from '@lucide/vue'
 import { computed } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
 
+import MarkdownContent from '@/components/MarkdownContent.vue'
 import SiteHeader from '@/components/SiteHeader.vue'
 import { getProjectById } from '@/data/projects'
 import { getDumpBySlug } from '@/utils/dumps'
@@ -57,11 +58,7 @@ const linkedDump = computed(() => getDumpBySlug(project.value?.attachedDump))
           {{ linkedDump.displayDate }}
         </time>
 
-        <article
-          v-if="linkedDump.kind === 'markdown'"
-          class="markdown-body"
-          v-html="linkedDump.html"
-        ></article>
+        <MarkdownContent v-if="linkedDump.kind === 'markdown'" :html="linkedDump.html" />
 
         <a
           v-else
@@ -190,33 +187,6 @@ const linkedDump = computed(() => getDumpBySlug(project.value?.attachedDump))
   align-items: center;
   gap: 0.4rem;
   color: var(--text-primary);
-  font-weight: var(--font-weight-semibold);
-}
-
-.markdown-body {
-  color: var(--text-primary);
-}
-
-.markdown-body :deep(h1),
-.markdown-body :deep(h2),
-.markdown-body :deep(h3) {
-  margin-top: var(--space-xl);
-  margin-bottom: var(--space-sm);
-  line-height: 1.2;
-}
-
-.markdown-body :deep(h1:first-child) {
-  margin-top: 0;
-}
-
-.markdown-body :deep(p) {
-  margin-bottom: var(--space-md);
-  color: var(--text-secondary);
-  line-height: 1.7;
-}
-
-.markdown-body :deep(a) {
-  color: var(--accent);
   font-weight: var(--font-weight-semibold);
 }
 
