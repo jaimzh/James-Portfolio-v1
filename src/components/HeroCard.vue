@@ -3,8 +3,10 @@ import { ref } from 'vue'
 
 import avatarImage from '@/assets/hero/animatedframe3.svg'
 import glassesImage from '@/assets/hero/staticglasses.svg'
+import { useTheme } from '@/composables/useTheme'
 
 const glassesActive = ref(false)
+const { toggleTheme } = useTheme()
 
 const hero = {
   name: 'James Henshaw',
@@ -19,6 +21,22 @@ anything I can think of. For now, I have so much to learn.`,
 
 function toggleGlasses() {
   glassesActive.value = !glassesActive.value
+}
+
+function toggleThemeFromAvatar(event) {
+  toggleGlasses()
+
+  if (Number.isFinite(event.clientX) && Number.isFinite(event.clientY)) {
+    toggleTheme(event)
+    return
+  }
+
+  const avatarBounds = event.currentTarget.getBoundingClientRect()
+
+  toggleTheme({
+    clientX: avatarBounds.left + avatarBounds.width / 2,
+    clientY: avatarBounds.top + avatarBounds.height / 2,
+  })
 }
 </script>
 
@@ -42,7 +60,14 @@ function toggleGlasses() {
         <figure
           class="hero-avatar-wrap"
           :class="{ 'glasses-active': glassesActive }"
+          role="button"
+          tabindex="0"
+          aria-label="Toggle color theme"
           @click="toggleGlasses"
+          @dblclick="toggleThemeFromAvatar"
+        
+          @keydown.enter="toggleThemeFromAvatar"
+          @keydown.space.prevent="toggleThemeFromAvatar"
         >
           <img :src="glassesImage" alt="" aria-hidden="true" class="glasses" />
           <img :src="avatarImage" :alt="hero.avatarAlt" class="hero-avatar" />
