@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import DumpsView from '@/views/DumpsView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -22,12 +23,17 @@ const router = createRouter({
     {
       path: '/dumps',
       name: 'dumps',
-      component: () => import('@/views/DumpsView.vue'),
+      component: DumpsView
     },
     {
       path: '/dumps/:slug',
       name: 'dump-post',
       component: () => import('@/views/DumpPostView.vue'),
+    },
+    {
+      path: '/projects/:projectId/dump',
+      name: 'project-dump',
+      component: () => import('@/views/ProjectDumpView.vue'),
     },
   ],
 })

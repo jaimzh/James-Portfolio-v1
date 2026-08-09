@@ -75,19 +75,16 @@ function formatDisplayDate(date) {
 function normalizeDump(path, rawContent) {
   const { data, content } = parseFrontmatter(rawContent)
   const slug = data.slug || slugFromPath(path)
-  const type = data.type || 'markdown'
+  const kind = data.kind || 'markdown'
 
   return {
     slug,
     title: data.title || slug,
     date: data.date || '',
     displayDate: formatDisplayDate(data.date),
-    description: data.description || '',
-    type,
-    source: data.source || (type === 'link' ? 'external' : 'portfolio'),
+    kind,
     url: data.url || '',
-    content,
-    html: type === 'markdown' ? markdown.render(content) : '',
+    html: kind === 'markdown' ? markdown.render(content) : '',
   }
 }
 
@@ -100,13 +97,13 @@ export function getDumpBySlug(slug) {
 }
 
 export function getDumpHref(dump) {
-  if (dump.type === 'link') {
+  if (dump.kind !== 'markdown') {
     return dump.url
   }
 
   return `/dumps/${dump.slug}`
 }
 
-export function isExternalDump(dump) {
-  return dump.type === 'link'
+export function opensExternally(dump) {
+  return dump.kind !== 'markdown'
 }

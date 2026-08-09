@@ -1,8 +1,9 @@
 <script setup>
 import { FileText, LinkIcon } from '@lucide/vue'
+import { RouterLink } from 'vue-router'
 
 import codeCanvasLogo from '@/assets/code-canvas-logo.svg'
-import { getDumpHref, isExternalDump } from '@/utils/dumps'
+import { getDumpHref, opensExternally } from '@/utils/dumps'
 
 defineProps({
   dump: {
@@ -11,44 +12,31 @@ defineProps({
   },
 })
 
-function sourceLabel(source) {
-  const labels = {
-    'code-canvas': 'Code Canvas',
-    external: 'External',
-    portfolio: 'Markdown',
-  }
-
-  return labels[source] || source
-}
-
-function sourceIcon(source) {
-  if (source === 'external') return LinkIcon
+function kindIcon(kind) {
+  if (kind === 'external') return LinkIcon
   return FileText
-}
-
-function isCodeCanvasDump(source) {
-  return source === 'code-canvas'
 }
 </script>
 
 <template>
-  <a
+  <component
+    :is="opensExternally(dump) ? 'a' : RouterLink"
     class="dump-card"
-    :href="getDumpHref(dump)"
-    :target="isExternalDump(dump) ? '_blank' : undefined"
-    :rel="isExternalDump(dump) ? 'noopener noreferrer' : undefined"
+    :to="opensExternally(dump) ? undefined : getDumpHref(dump)"
+    :href="opensExternally(dump) ? getDumpHref(dump) : undefined"
+    :target="opensExternally(dump) ? '_blank' : undefined"
+    :rel="opensExternally(dump) ? 'noopener noreferrer' : undefined"
   >
     <div class="dump-line">
       <span class="dump-title-group">
         <span class="dump-source-icon">
-          <span
-            v-if="isCodeCanvasDump(dump.source)"
-            :style="{ '--logo-url': `url(${codeCanvasLogo})` }"
-            role="img"
-            :aria-label="sourceLabel(dump.source)"
+          <img
+            v-if="dump.kind === 'code-canvas'"
+            :src="codeCanvasLogo"
+            alt="Code Canvas"
             class="dump-source-logo"
-          ></span>
-          <component v-else :is="sourceIcon(dump.source)" :size="14" :stroke-width="2" />
+          />
+          <component v-else :is="kindIcon(dump.kind)" :size="14" :stroke-width="2" />
         </span>
 
         <h2 class="dump-title">{{ dump.title }}</h2>
@@ -58,7 +46,7 @@ function isCodeCanvasDump(source) {
         <time :datetime="dump.date">{{ dump.displayDate }}</time>
       </span>
     </div>
-  </a>
+  </component>
 </template>
 
 <style scoped>
@@ -132,11 +120,16 @@ function isCodeCanvasDump(source) {
 }
 
 .dump-source-logo {
-  width: 14px;
-  height: 14px;
-  background: currentColor;
-  mask: var(--logo-url) center / contain no-repeat;
-  -webkit-mask: var(--logo-url) center / contain no-repeat;
+  width: 18px;
+  height: 18px;
+  max-width: none;
+  object-fit: contain;
+  transition: filter var(--transition-fast);
+}
+
+.dump-card:hover .dump-source-logo,
+.dump-card:focus-visible .dump-source-logo {
+  filter: brightness(0);
 }
 
 .dump-title {

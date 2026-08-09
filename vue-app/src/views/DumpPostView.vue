@@ -4,10 +4,18 @@ import { computed } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
 
 import SiteHeader from '@/components/SiteHeader.vue'
+import { getProjectByAttachedDump } from '@/data/projects'
 import { getDumpBySlug } from '@/utils/dumps'
 
 const route = useRoute()
 const dump = computed(() => getDumpBySlug(route.params.slug))
+const project = computed(() => getProjectByAttachedDump(dump.value?.slug))
+const backDestination = computed(() =>
+  project.value
+    ? { name: 'project-dump', params: { projectId: project.value.id } }
+    : { name: 'dumps' },
+)
+const backLabel = computed(() => (project.value ? `Back to ${project.value.name}` : 'Back to Dumps'))
 </script>
 
 <template>
@@ -16,9 +24,9 @@ const dump = computed(() => getDumpBySlug(route.params.slug))
 
     <main v-if="dump" class="section dump-post">
       <div class="dump-post-topbar">
-        <RouterLink class="back-link" to="/dumps">
+        <RouterLink class="back-link" :to="backDestination">
           <ArrowLeft :size="16" :stroke-width="2" />
-          Back to Dumps
+          {{ backLabel }}
         </RouterLink>
 
         <time class="dump-date" :datetime="dump.date">{{ dump.displayDate }}</time>

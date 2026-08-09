@@ -16,6 +16,7 @@ export const projects = [
     name: 'Code Canvas',
     description:
       'A fullstack infinite, spatial whiteboard for non-linear thinkers, featuring nine custom interactive tools including live code editors, Mermaid diagrams, voice notes, and sandboxed HTML environments.',
+    attachedDump: 'building-code-canvas',
     url: 'https://code-canvas-tldraw.vercel.app/',
     previewImage: codeCanvasImage,
     tags: ['Next.js', 'TypeScript', 'Tldraw', 'MongoDB', 'Monaco Editor'],
@@ -110,3 +111,11 @@ export const projects = [
     tags: ['Python', 'Backend', 'Roadmap.sh', 'Full-Stack'],
   },
 ]
+
+export function getProjectById(projectId) {
+  return projects.find((project) => project.id === projectId)
+}
+
+export function getProjectByAttachedDump(attachedDump) {
+  return projects.find((project) => project.attachedDump === attachedDump)
+}

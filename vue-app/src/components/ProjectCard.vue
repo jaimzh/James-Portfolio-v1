@@ -1,36 +1,45 @@
 <script setup>
+import { ArrowUpRight, PenLine } from '@lucide/vue'
+import { RouterLink } from 'vue-router'
+
 defineProps({
   project: {
     type: Object,
     required: true,
   },
 })
+
 </script>
 
 <template>
-  <a
+  <component
+    :is="project.attachedDump ? RouterLink : 'a'"
     :id="`project-${project.id}`"
-    :href="project.url"
-    target="_blank"
-    rel="noopener noreferrer"
+    :to="
+      project.attachedDump
+        ? { name: 'project-dump', params: { projectId: project.id } }
+        : undefined
+    "
+    :href="project.attachedDump ? undefined : project.url"
+    :target="project.attachedDump ? undefined : '_blank'"
+    :rel="project.attachedDump ? undefined : 'noopener noreferrer'"
     class="project-card"
   >
     <div class="project-content">
       <div class="project-card-header">
         <h3 class="project-name">{{ project.name }}</h3>
-        <svg
+        <span
           class="project-arrow"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          aria-hidden="true"
+          :title="project.attachedDump ? 'Open project dump' : 'Open live project'"
         >
-          <line x1="7" y1="17" x2="17" y2="7" />
-          <polyline points="7 7 17 7 17 17" />
-        </svg>
+          <PenLine
+            v-if="project.attachedDump"
+            :size="16"
+            :stroke-width="1.8"
+            aria-hidden="true"
+          />
+          <ArrowUpRight v-else :size="16" :stroke-width="1.8" aria-hidden="true" />
+        </span>
       </div>
 
       <p class="project-desc">{{ project.description }}</p>
@@ -47,7 +56,7 @@ defineProps({
         <img :src="project.previewImage" :alt="`${project.name} Preview`" loading="lazy" />
       </div>
     </div>
-  </a>
+  </component>
 </template>
 
 <style scoped>
@@ -115,10 +124,14 @@ defineProps({
 }
 
 .project-arrow {
-  width: 16px;
-  height: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
   flex-shrink: 0;
   color: var(--text-muted);
+  cursor: pointer;
   transition:
     color var(--transition-fast),
     transform var(--transition-fast);
