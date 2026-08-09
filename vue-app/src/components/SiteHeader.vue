@@ -1,13 +1,16 @@
 <script setup>
-import { onBeforeUnmount, onMounted, ref } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
+import { RouterLink, useRoute } from 'vue-router'
 
 const navLinks = [
-  { label: 'Home', href: '#hero', sectionId: 'hero' },
-  { label: 'Stack', href: '#stack', sectionId: 'stack' },
-  { label: 'Projects', href: '#projects', sectionId: 'projects' },
+  { label: 'Home', to: { path: '/', hash: '#hero' }, sectionId: 'hero' },
+  { label: 'Stack', to: { path: '/', hash: '#stack' }, sectionId: 'stack' },
+  { label: 'Projects', to: { path: '/', hash: '#projects' }, sectionId: 'projects' },
 ]
 
+const route = useRoute()
 const activeSection = ref('hero')
+const isDumpsRoute = computed(() => route.path.startsWith('/dumps'))
 
 let navObserver
 
@@ -41,9 +44,15 @@ onBeforeUnmount(() => {
     <nav class="navbar" aria-label="Main Navigation">
       <ul class="nav-list">
         <li v-for="link in navLinks" :key="link.sectionId">
-          <a :class="{ active: activeSection === link.sectionId }" :href="link.href">
+          <RouterLink
+            :class="{ active: !isDumpsRoute && activeSection === link.sectionId }"
+            :to="link.to"
+          >
             {{ link.label }}
-          </a>
+          </RouterLink>
+        </li>
+        <li>
+          <RouterLink :class="{ active: isDumpsRoute }" to="/dumps">Dumps</RouterLink>
         </li>
       </ul>
     </nav>
