@@ -70,7 +70,9 @@ function toggleThemeFromAvatar(event) {
           @keydown.space.prevent="toggleThemeFromAvatar"
         >
           <img :src="glassesImage" alt="" aria-hidden="true" class="glasses" />
-          <img :src="avatarImage" :alt="hero.avatarAlt" class="hero-avatar" />
+          <span class="hero-avatar-frame">
+            <img :src="avatarImage" :alt="hero.avatarAlt" class="hero-avatar" />
+          </span>
         </figure>
 
         <div class="hero-body">
@@ -167,14 +169,21 @@ function toggleThemeFromAvatar(event) {
   cursor: pointer;
 }
 
-.hero-avatar-wrap > img {
+.hero-avatar-frame {
+  display: block;
+  width: 150px;
+  height: 150px;
+  padding: var(--avatar-frame-padding);
+  border: var(--avatar-frame-border-width) solid var(--avatar-frame-border);
+  border-radius: 50%;
+  background: var(--avatar-frame-gap);
   transition:
     scale 0.18s ease,
     opacity 0.35s ease,
     transform 0.45s ease;
 }
 
-.hero-avatar-wrap:active > img {
+.hero-avatar-wrap:active .hero-avatar-frame {
   scale: 0.94;
 }
 
@@ -199,10 +208,11 @@ function toggleThemeFromAvatar(event) {
 }
 
 .hero-avatar {
-  width: 150px;
-  height: 150px;
-  padding: 0.4rem;
-  border: 4px solid var(--avatar-border);
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: var(--avatar-image-padding);
+  border: var(--avatar-image-border-width) solid var(--avatar-border);
   border-radius: 50%;
   object-fit: cover;
 }
@@ -344,7 +354,7 @@ function toggleThemeFromAvatar(event) {
   }
 
   .glasses,
-  .hero-avatar {
+  .hero-avatar-frame {
     width: 230px;
     height: 230px;
   }

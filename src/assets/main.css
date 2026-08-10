@@ -22,6 +22,12 @@
   --hero-pattern-color: #000000;
   --hero-pattern-text: var(--bg);
   --avatar-border: #ffffff;
+  --avatar-image-padding: 0.4rem;
+  --avatar-image-border-width: 4px;
+  --avatar-frame-padding: 0px;
+  --avatar-frame-border-width: 0px;
+  --avatar-frame-border: transparent;
+  --avatar-frame-gap: transparent;
   --code-canvas-logo: #94a3b8;
   --code-canvas-logo-hover: #000000;
 
@@ -103,6 +109,12 @@
   --hero-pattern-color: #ffffff;
   --hero-pattern-text: #000000;
   --avatar-border: #000000;
+  --avatar-image-padding: 0px;
+  --avatar-image-border-width: 3px;
+  --avatar-frame-padding: 0.2rem;
+  --avatar-frame-border-width: 4px;
+  --avatar-frame-border: #000000;
+  --avatar-frame-gap: #ffffff;
   --code-canvas-logo: #808080;
   --code-canvas-logo-hover: #ffffff;
 
