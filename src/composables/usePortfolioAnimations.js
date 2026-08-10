@@ -72,9 +72,7 @@ export function usePortfolioAnimations(rootRef) {
           text: { value: nextName, delimiter: '' },
           ease: 'none',
           onComplete: () => {
-            gsap.set(cursorEl, {
-              animation: 'cursorBlink 0.75s step-end infinite',
-            })
+            cursorEl.style.removeProperty('animation')
             currentIndex = nextIndex
             nameCycleCall = gsap.delayedCall(3, cycleNames)
           },

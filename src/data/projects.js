@@ -34,7 +34,7 @@ export const projects = [
     id: 'lnnk',
     name: 'Lnnk',
     description:
-      'A modern, minimalist URL shortener featuring instant redirection, automated QR code generation, and smooth interactive UI transitions powered by Framer Motion.',
+      'A minimal URL shortener for creating short links and QR codes, with lightweight CDN-style file sharing.',
     url: 'https://lnnk.click/',
     previewImage: lnnkImage,
     tags: ['Next.js', 'TypeScript', 'MongoDB', 'Tailwind CSS', 'Zod'],
