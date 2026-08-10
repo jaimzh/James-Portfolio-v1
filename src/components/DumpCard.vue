@@ -153,11 +153,17 @@ function kindIcon(kind) {
 @media (max-width: 520px) {
   .dump-line {
     align-items: flex-start;
-    flex-direction: column;
-    gap: var(--space-xs);
+    gap: var(--space-sm);
+  }
+
+  .dump-title-group {
+    flex: 1 1 auto;
   }
 
   .dump-title {
+    overflow: visible;
+    overflow-wrap: anywhere;
+    text-overflow: clip;
     white-space: normal;
   }
 }
