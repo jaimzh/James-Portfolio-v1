@@ -188,12 +188,15 @@ async function goToNextPage() {
 
 @media (max-width: 520px) {
   .carousel-dots {
-    align-items: flex-start;
+    align-items: center;
     flex-direction: column;
+    justify-content: center;
+
+
   }
 
   .dots-wrapper {
-    width: 100%;
+    width: auto;
     overflow-x: auto;
     justify-content: flex-start;
   }
