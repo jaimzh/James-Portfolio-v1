@@ -12,7 +12,7 @@ import { dumps } from '@/utils/dumps'
     <main class="section dumps-page" aria-labelledby="dumps-title">
       <h1 id="dumps-title" class="section-heading">Notes, links, and little thoughts.</h1>
       <p class="section-info">
-        Markdown posts live here. Code Canvas and external dumps open where they were made.
+        Just a bunch of random thoughts and stuff, idk man.... (ᵕ— ᴗ —)  
       </p>
 
       <div class="dumps-list">
