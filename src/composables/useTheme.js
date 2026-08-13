@@ -2,7 +2,9 @@ import { computed, nextTick, ref, watchEffect } from 'vue'
 import gsap from 'gsap'
 
 const storageKey = 'jaimz-theme'
-const transitionDuration = 600
+const transitionDuration = 1050
+
+let activeViewTransition = null
 
 function getInitialTheme() {
   if (typeof window === 'undefined') return 'light'
@@ -34,13 +36,32 @@ export function useTheme() {
       return
     }
 
-    const x = event.clientX
-    const y = event.clientY
-    const endRadius = Math.hypot(
-      Math.max(x, window.innerWidth - x),
-      Math.max(y, window.innerHeight - y),
-    )
+    const buttonRect = event?.currentTarget?.getBoundingClientRect?.()
 
+    // Both getBoundingClientRect() and the root view-transition snapshot use
+    // layout-viewport CSS pixels. visualViewport is a different coordinate
+    // space in Chrome when page zoom is not 100%.
+    const width = document.documentElement.clientWidth
+    const height = document.documentElement.clientHeight
+    const x = buttonRect
+      ? buttonRect.left + buttonRect.width / 2
+      : Number.isFinite(event?.clientX)
+        ? event.clientX
+        : width / 2
+    const y = buttonRect
+      ? buttonRect.top + buttonRect.height / 2
+      : Number.isFinite(event?.clientY)
+        ? event.clientY
+        : height / 2
+    const endRadius =
+      Math.max(
+        Math.hypot(x, y),
+        Math.hypot(width - x, y),
+        Math.hypot(x, height - y),
+        Math.hypot(width - x, height - y),
+      ) + 16
+
+    activeViewTransition?.skipTransition()
     document.documentElement.classList.add('theme-transitioning')
     gsap.globalTimeline.pause()
 
@@ -48,24 +69,36 @@ export function useTheme() {
       setTheme(nextTheme)
       await nextTick()
     })
+    activeViewTransition = transition
 
-    transition.finished.finally(() => {
-      document.documentElement.classList.remove('theme-transitioning')
-      gsap.globalTimeline.resume()
-    })
+    try {
+      await transition.ready
 
-    await transition.ready
+      const reveal = document.documentElement.animate(
+        {
+          clipPath: [
+            `circle(0px at ${x}px ${y}px)`,
+            `circle(${endRadius}px at ${x}px ${y}px)`,
+          ],
+        },
+        {
+          duration: transitionDuration,
+          easing: 'cubic-bezier(.16, 1, .3, 1)',
+          fill: 'both',
+          pseudoElement: '::view-transition-new(root)',
+        },
+      )
 
-    document.documentElement.animate(
-      {
-        clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${endRadius}px at ${x}px ${y}px)`],
-      },
-      {
-        duration: transitionDuration,
-        easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
-        pseudoElement: '::view-transition-new(root)',
-      },
-    )
+      await reveal.finished
+    } catch {
+      // A newer click intentionally interrupts the previous transition.
+    } finally {
+      if (activeViewTransition === transition) {
+        activeViewTransition = null
+        document.documentElement.classList.remove('theme-transitioning')
+        gsap.globalTimeline.resume()
+      }
+    }
   }
 
   watchEffect(() => {
