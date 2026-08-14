@@ -35,7 +35,7 @@ export const projects = [
     name: 'Lnnk',
     description:
       'A minimal URL shortener for creating short links and QR codes, with lightweight CDN-style file sharing.',
-    url: 'https://lnkkk.vercel.app/',
+    url: 'https://lnkkk.click/',
     previewImage: lnnkImage,
     tags: ['Next.js', 'TypeScript', 'MongoDB', 'Tailwind CSS', 'Zod'],
   },
