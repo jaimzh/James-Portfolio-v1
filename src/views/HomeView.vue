@@ -3,6 +3,7 @@ import { ref } from 'vue'
 
 import HeroCard from '@/components/HeroCard.vue'
 import ProjectsSection from '@/components/ProjectsSection.vue'
+import QuoteSection from '@/components/QuoteSection.vue'
 import SiteFooter from '@/components/SiteFooter.vue'
 import SiteHeader from '@/components/SiteHeader.vue'
 import TechStack from '@/components/TechStack.vue'
@@ -33,6 +34,10 @@ usePortfolioAnimations(homeView)
       <section id="projects" aria-labelledby="projects-title">
         <ProjectsSection />
       </section>
+
+      <hr class="divider" />
+
+      <QuoteSection />
     </main>
 
     <SiteFooter />
