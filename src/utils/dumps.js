@@ -6,6 +6,21 @@ const markdown = new MarkdownIt({
   typographer: true,
 })
 
+const defaultFenceRenderer =
+  markdown.renderer.rules.fence ||
+  ((tokens, index, options, env, renderer) => renderer.renderToken(tokens, index, options))
+
+markdown.renderer.rules.fence = (tokens, index, options, env, renderer) => {
+  const token = tokens[index]
+  const language = token.info.trim().split(/\s+/)[0]
+
+  if (language === 'mermaid') {
+    return `<pre class="mermaid">${markdown.utils.escapeHtml(token.content)}</pre>`
+  }
+
+  return defaultFenceRenderer(tokens, index, options, env, renderer)
+}
+
 function headingText(token) {
   return (token.children || [])
     .filter((child) => ['text', 'code_inline'].includes(child.type))

@@ -9,6 +9,7 @@ import orbitImage from '@/assets/projects/orbit.png'
 import pitchPackImage from '@/assets/projects/pitch-pack.png'
 import roadmapImage from '@/assets/projects/roadmap-projects.png'
 import simplrImage from '@/assets/projects/simplr.png'
+import tadashiiImage from '@/assets/projects/tadashii.png'
 
 export const projects = [
   {
@@ -22,14 +23,26 @@ export const projects = [
     tags: ['Next.js', 'TypeScript', 'Tldraw', 'MongoDB', 'Monaco Editor'],
   },
   {
+  id: 'tadashii',
+  name: 'Tadashii',
+  attachedDump: 'building-tadashii',
+  description:
+    'An AI-assisted anime discovery app. Describe a mood, story, or character arc and get focused recommendations with match scores and reasons.',
+  url: 'https://tadashii.vercel.app/',
+  previewImage: tadashiiImage,
+  tags: ['Vue', 'FastAPI', 'Gemini', 'Vite', 'GSAP'],
+},
+  {
     id: 'caleb-caz',
     name: 'Caleb Caz Portfolio',
     description:
-      'A polished portfolio website designed and built for a client, featuring smooth animations and a modern layout.',
+      'A polished portfolio website designed and built for a voice actor buddy of mine, featuring smooth animations and a modern layout.',
     url: 'https://caleb-caz.vercel.app/',
     previewImage: calebCazImage,
     tags: ['React', 'CSS', 'Framer Motion'],
   },
+
+
   {
     id: 'lnnk',
     name: 'Lnnk',

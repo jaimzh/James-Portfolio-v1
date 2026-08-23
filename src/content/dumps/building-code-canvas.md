@@ -7,35 +7,37 @@ date: '2026-08-11'
 
 Code Canvas is an infinite spatial whiteboard for people who do not always think in a straight line. Instead of forcing every idea into a list of files or tabs, it gives code, diagrams, notes, and experiments a shared visual space.
 
-This dump is a growing record of why I built it, how the pieces fit together, and what I learned while turning the idea into a working product.
+This dump is a growing record of why I built Code Canvas, how the pieces fit together, and what I learned while turning the idea into a working product.
 
 ## The idea
+
 
 Most development tools separate different parts of the thinking process. Code lives in an editor, diagrams live somewhere else, and quick notes usually end up scattered across several apps.
 
 I wanted to explore a different workflow: one canvas where related ideas could remain visually connected. The position of an item should carry meaning, not just its filename or place in a folder.
 
+I simply wanted to draw over code to put it as bluntly as possible, i am a visual learner and i figured, it'd be easier to draw over code or notes in an infinte whiteboard like canvas
+
+I also hated the fact that Notion was a little bit too limiting, i could not draw over markdown or record voice notes there, so i was like "hey why not just build my own Documenting app", but in my pursuit for silver i made gold accidently. I genuinely think codecanvas might be the most overpowered note taking app ever, that fits **MY** specifications and needs exaclty the way i want it. 
+
 ## The problem
 
 Non-linear work becomes difficult when every tool expects a linear workflow. Constantly switching between editors, diagram tools, notes, and browser previews breaks context and makes it harder to see how ideas relate to one another.
 
-Code Canvas tries to reduce that fragmentation by bringing those materials into one workspace without turning the interface into a crowded dashboard.
+I wrote notes about code in Notion or Obsidian and switching to vscode or even a browser article when doing some kind of research became overwhelming.
+
+Code Canvas tries to reduce that fragmentation by bringing those materials and more into one workspace without turning the interface into a crowded dashboard....well, depending on how organized you are
 
 ## What I built
 
-The project combines nine custom interactive tools inside an infinite canvas. Each tool represents a different kind of thought or working material.
+The project combines ~~nine~~ twelve custom interactive tools built ontop of [tldraw's](https://www.tldraw.com) infinite canvas. Each tool represents a different kind of thought or working material.
 
-### A spatial workspace
+### Cross Platform Project Sync
+You create an account, and all your code canvas projects are securely stored on the cloud, you can organize your projects into folders, share projects as live links, import, export...man i really should get to finish code canvas's official documentation (-ヘ-｀)
 
-The canvas is the main interface rather than a secondary navigation layer. Items can be positioned near the ideas they relate to, allowing the workspace itself to become part of the explanation.
+### Code Card
+Import code snippets or an entire code base as a properly syntax highlighted Code Cards....jeez that barely explains anything, i'll attatch images later and fill up the remaining 10 or 9 tools 
 
-### Live code editors
-
-Code editors live directly on the canvas, making it possible to write and inspect code without leaving the surrounding context. Monaco Editor provides the familiar editing experience inside those tools.
-
-### Diagrams, notes, and experiments
-
-Mermaid diagrams, voice notes, and sandboxed HTML environments can sit beside the code they describe. The goal is not to replace every specialist application, but to keep connected thinking in one place.
 
 ## Technology choices
 
