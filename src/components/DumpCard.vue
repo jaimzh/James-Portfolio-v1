@@ -3,6 +3,7 @@ import { FileText, LinkIcon } from '@lucide/vue'
 import { RouterLink } from 'vue-router'
 
 import CodeCanvasLogo from '@/components/CodeCanvasLogo.vue'
+import QuickJotLogo from '@/components/QuickJotLogo.vue'
 import { getDumpHref, opensExternally } from '@/utils/dumps'
 
 defineProps({
@@ -31,6 +32,7 @@ function kindIcon(kind) {
       <span class="dump-title-group">
         <span class="dump-source-icon">
           <CodeCanvasLogo v-if="dump.kind === 'code-canvas'" class="dump-source-logo" />
+          <QuickJotLogo v-else-if="dump.kind === 'quick-jot'" class="dump-source-logo" />
           <component v-else :is="kindIcon(dump.kind)" :size="14" :stroke-width="2" />
         </span>
 
