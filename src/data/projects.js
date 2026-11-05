@@ -3,6 +3,7 @@ import autosortImage from '@/assets/projects/autosort.png'
 import calebCazImage from '@/assets/projects/caleb-caz.png'
 import codeCanvasImage from '@/assets/projects/code-canvas.png'
 import cortexImage from '@/assets/projects/cortex.png'
+import cortextImage from '@/assets/projects/cortext.png'
 import diffStudioImage from '@/assets/projects/diff-studio.png'
 import fingerGesturesImage from '@/assets/projects/finger-gestures.png'
 import lnnkImage from '@/assets/projects/lnnk.png'
@@ -31,7 +32,16 @@ export const projects = [
       'A tiny, typed, zero-dependency JavaScript library for multi-finger taps and swipes on the web. Built to bring interactions like two-finger undo and three-finger redo to browser-based apps.',
     url: 'https://finger-gestures.vercel.app/',
     previewImage: fingerGesturesImage,
-    tags: ['TypeScript', 'JavaScript', 'Pointer Events', 'npm', 'Touch Gestures'],
+    tags: ['TypeScript', 'Pointer Events', 'npm', 'Touch Gestures'],
+  },
+  {
+    id: 'cortext',
+    name: 'Cortext',
+    description:
+      'Cortext lets you control your computer from your phone with touch, keyboard, voice, and gamepad input. Built with a React interface and Python backend for real-time Windows interaction.',
+    url: 'https://cortext-page.vercel.app',
+    previewImage: cortextImage,
+    tags: ['React', 'Python', 'FastAPI', 'WebSockets', 'Voice AI', 'Windows Automation'],
   },
   {
   id: 'tadashii',
