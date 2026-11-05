@@ -4,6 +4,7 @@ import calebCazImage from '@/assets/projects/caleb-caz.png'
 import codeCanvasImage from '@/assets/projects/code-canvas.png'
 import cortexImage from '@/assets/projects/cortex.png'
 import diffStudioImage from '@/assets/projects/diff-studio.png'
+import fingerGesturesImage from '@/assets/projects/finger-gestures.png'
 import lnnkImage from '@/assets/projects/lnnk.png'
 import orbitImage from '@/assets/projects/orbit.png'
 import pitchPackImage from '@/assets/projects/pitch-pack.png'
@@ -23,6 +24,16 @@ export const projects = [
     tags: ['Next.js', 'TypeScript', 'Tldraw', 'MongoDB', 'Monaco Editor'],
   },
   {
+    id: 'finger-gestures',
+    name: 'Finger Gestures',
+    attachedDump: 'making-my-first-library',
+    description:
+      'A tiny, typed, zero-dependency JavaScript library for multi-finger taps and swipes on the web. Built to bring interactions like two-finger undo and three-finger redo to browser-based apps.',
+    url: 'https://finger-gestures.vercel.app/',
+    previewImage: fingerGesturesImage,
+    tags: ['TypeScript', 'JavaScript', 'Pointer Events', 'npm', 'Touch Gestures'],
+  },
+  {
   id: 'tadashii',
   name: 'Tadashii',
   attachedDump: 'building-tadashii',
@@ -32,6 +43,7 @@ export const projects = [
   previewImage: tadashiiImage,
   tags: ['Vue', 'FastAPI', 'Gemini', 'Vite', 'GSAP'],
 },
+
   {
     id: 'caleb-caz',
     name: 'Caleb Caz Portfolio',
